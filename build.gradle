@@ -1,0 +1,74 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = "4.8.1"
+}
+
+group = 'com.github.frankfarrell'
+
+buildscript {
+    ext {
+        // Dependency Versions
+        nebulaReleaseVersion = "4.0.1"
+        jGitVersion = "4.10.0.201712302008-r"
+        javaSemVerVersion = "0.9.0"
+        junitVersion = "4.12"
+        mockitoVersion = "2.19.0"
+        assertJVersion = "3.4.1"
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("com.netflix.nebula:nebula-release-plugin:${nebulaReleaseVersion}")
+    }
+}
+
+apply plugin: "groovy"
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'idea'
+apply plugin: "nebula.nebula-release"
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
+}
+
+jar {
+    baseName = "blast-radius"
+    archivesBaseName = "blast-radius"
+    manifest {
+        attributes("Implementation-Title": "Gradle plugin to determine changed modules for CD", "Implementation-Version": version)
+    }
+    // Include all dependent libraries in the archive "lib" directory (fat jar).
+    into("lib") {
+        from configurations.runtime
+    }
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+
+    compile("org.eclipse.jgit:org.eclipse.jgit:${jGitVersion}")
+    compile("com.github.zafarkhaja:java-semver:${javaSemVerVersion}")
+
+    testCompile("junit:junit:${junitVersion}")
+    testCompile("org.mockito:mockito-core:${mockitoVersion}")
+    testCompile("org.assertj:assertj-core:${assertJVersion}")
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusUrl}/nexus/content/repositories/releases") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusUrl}/nexus/content/repositories/snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+        }
+    }
+}
+
+
