@@ -1,3 +1,6 @@
+
+[![Gradle Badge](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/plugin/com.github.frankfarrell.blastradius/com.github.frankfarrell.blastradius.gradle.plugin/maven-metadata.xml.svg?label=gradle)](https://plugins.gradle.org/plugin/com.github.frankfarrell.blastradius)
+
 # Blast Radius
 
 Blast radius is a gradle plugin that detects which, if any, modules of a gradle project have 
