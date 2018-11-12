@@ -1,5 +1,5 @@
 
-[![Gradle Badge](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/plugin/com.github.frankfarrell.blastradius/com.github.frankfarrell.blastradius.gradle.plugin/maven-metadata.xml.svg?label=gradle)](https://plugins.gradle.org/plugin/com.github.frankfarrell.blastradius)
+[![Gradle Badge](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/com/github/frankfarrell/blastradius/com.github.frankfarrell.blastradius.gradle.plugin/maven-metadata.xml.svg)](https://plugins.gradle.org/plugin/com.github.frankfarrell.blastradius)
 
 # Blast Radius
 
