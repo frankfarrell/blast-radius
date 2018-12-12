@@ -4,6 +4,7 @@ public enum DiffStrategy {
 
     JENKINS_LAST_COMMIT,
     PREVIOUS_TAG,
-    PREVIOUS_COMMIT;
+    PREVIOUS_COMMIT,
+    SPECIFIC_COMMIT;
 
 }

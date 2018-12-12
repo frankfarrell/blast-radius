@@ -39,6 +39,7 @@ public class ProjectModulesChangedTask  extends ConventionTask {
     private Optional<Set<String>> filePatterns = Optional.empty();
 
     private Map<String, List<String>> moduleFilePatterns = new HashMap<>();
+    private String previousCommit;
 
     public String getFileLocation() {
         return fileLocation.orElse(DEFAULT_FILE_LOCATION);
@@ -55,6 +56,15 @@ public class ProjectModulesChangedTask  extends ConventionTask {
     public Set<String> getFilePatterns() {
         return filePatterns.orElse(DEFAULT_FILE_PATTERNS);
     }
+
+    public String getPreviousCommit() {
+        return previousCommit;
+    }
+
+    public void setPreviousCommit(String previousCommit) {
+        this.previousCommit = previousCommit;
+    }
+
 
     public void setFilePatterns(final List<String> filePatterns) {
         this.filePatterns = filePatterns == null? Optional.empty():Optional.of(new HashSet<>(filePatterns));
@@ -77,7 +87,7 @@ public class ProjectModulesChangedTask  extends ConventionTask {
         try(final FileWriter writer = new FileWriter(fileToWrite, false)){
 
             final GitRepository gitRepository = new GitRepository();
-            final Optional<List<String>> pathsWithDiffOptional = gitRepository.getPathsThatHaveChanged(diffStrategy);
+            final Optional<List<String>> pathsWithDiffOptional = gitRepository.getPathsThatHaveChanged(diffStrategy, Optional.ofNullable(previousCommit));
 
             final Map<String, Boolean> changedModules = new HashMap<>();
 

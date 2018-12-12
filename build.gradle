@@ -35,7 +35,7 @@ repositories {
     maven { url "https://plugins.gradle.org/m2/" }
 }
 
-version = "1.0.0"
+version = "1.0.1"
 group = "com.github.frankfarrell.blastradius"
 
 

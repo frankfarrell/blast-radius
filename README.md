@@ -111,7 +111,8 @@ Either version of the task takes a parameter `diffStrategy` that determines how 
 If it fails to find the value, the task returns true for everything (better to dpeloy to much than not to have deployed at all)
 1. JENKINS_LAST_COMMIT => Uses the previous git commit from the jenkins build. Watch out for running the same build with different parameters! 
 2. PREVIOUS_TAG => If you build with tag 0.1.2, this will do a diff with tag 0.1.1. If you build with HEAD it will compare HEAD with the top commit. Tags must use semantic versioning
-3. PREVIOUS_COMMIT => Just compares with the previous commit. 
+3. PREVIOUS_COMMIT => Just compares with the previous commit.
+4. SPECIFIC_COMMIT => Compare to an explicit commit hash passed in the `previousCommit` attribute. `previousCommit` is mandatory
 
 ### Using it from a pipeline
 

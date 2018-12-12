@@ -28,6 +28,7 @@ public class ModuleChangedTask extends ConventionTask {
 
     private DiffStrategy diffStrategy = DiffStrategy.JENKINS_LAST_COMMIT;
 
+    private String previousCommit;
 
     public static final Set<String> DEFAULT_FILE_PATTERNS =  Collections.unmodifiableSet(Stream.of("/[^.]*.gradle", "/src/main/.*", "/deploy/.*").collect(Collectors.toSet()));
 
@@ -43,6 +44,14 @@ public class ModuleChangedTask extends ConventionTask {
 
     public void setDiffStrategy(final String diffStrategy) {
         this.diffStrategy = DiffStrategy.valueOf(diffStrategy);
+    }
+
+    public String getPreviousCommit() {
+        return previousCommit;
+    }
+
+    public void setPreviousCommit(String previousCommit) {
+        this.previousCommit = previousCommit;
     }
 
     @TaskAction
@@ -68,7 +77,7 @@ public class ModuleChangedTask extends ConventionTask {
     public boolean shouldModuleBeDeployed(final Project project, final GradleModule gradleModule, Set<String> filePatterns) throws IOException, GitAPIException {
 
         final GitRepository gitRepository = new GitRepository();
-        final Optional<List<String>> pathsWithDiffOptional = gitRepository.getPathsThatHaveChanged(diffStrategy);
+        final Optional<List<String>> pathsWithDiffOptional = gitRepository.getPathsThatHaveChanged(diffStrategy, Optional.ofNullable(previousCommit));
 
         return pathsWithDiffOptional.map(pathsWithDiff -> gradleModule.hasChanged(filePatterns, pathsWithDiff)).orElse(true);
     }

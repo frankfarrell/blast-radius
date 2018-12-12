@@ -10,9 +10,9 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
+import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
-import org.gradle.internal.impldep.aQute.bnd.osgi.resource.FilterParser;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,7 +47,12 @@ public class GitRepository {
     An Optional.empty() result means that changes cannot be determined.
     The client can decide what to do, but its recommened to deploy everything
      */
+
     public Optional<List<String>> getPathsThatHaveChanged(final DiffStrategy diffStrategy) throws IOException, GitAPIException {
+        return getPathsThatHaveChanged(diffStrategy, Optional.empty());
+    }
+
+    public Optional<List<String>> getPathsThatHaveChanged(final DiffStrategy diffStrategy, final Optional<String> previousCommit) throws IOException, GitAPIException {
 
         logger.info("Currently on branch {}", repository.getBranch());
 
@@ -61,8 +66,17 @@ public class GitRepository {
             case PREVIOUS_TAG:
                 commitIds = getCommitIdsFromPreviousTag();
                 break;
+
             case PREVIOUS_COMMIT:
                 commitIds = getCommitIdsFromPreviousCommit();
+                break;
+            case SPECIFIC_COMMIT:
+                if(previousCommit.isPresent()){
+                    commitIds = Optional.of(new CommitIds(repository.resolve(previousCommit.get()) , repository.resolve(Constants.HEAD)));
+                }
+                else{
+                    throw new InvalidUserDataException("previousCommit hash must be specified if the SPECIFIC_COMMIT diff strategy is used");
+                }
                 break;
             default:
                 throw new RuntimeException("This is impossible, but it makes the compiler happy");
